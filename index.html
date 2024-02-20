@@ -3,17 +3,19 @@
   <head>
     <script>
       const input = location.hash.substring(1);
-      try{
-        const binary = atob(input);
-        const textDecoder = new TextDecoder('utf-8');
-        const array = new Uint8Array(binary.length);
-        for (let i = 0; i < binary.length; i++) {
-            array[i] = binary.charCodeAt(i);
+      if(input){
+        try{
+          const binary = atob(input);
+          const textDecoder = new TextDecoder('utf-8');
+          const array = new Uint8Array(binary.length);
+          for (let i = 0; i < binary.length; i++) {
+              array[i] = binary.charCodeAt(i);
+          }
+          const result = textDecoder.decode(array);
+          location.replace(result);
+        }catch(e){
+          location.replace(`https://www.google.com/search?q=${input}`);
         }
-        const result = textDecoder.decode(array);
-        location.replace(result);
-      }catch(e){
-        location.replace(`https://www.google.com/search?q=${input}`);
       }
     </script>
   </head>
