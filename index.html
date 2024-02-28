@@ -2,21 +2,29 @@
 <html>
   <head>
     <script>
-      const input = location.hash.substring(1);
-      if(input){
-        try{
-          const binary = atob(input);
-          const textDecoder = new TextDecoder('utf-8');
-          const array = new Uint8Array(binary.length);
-          for (let i = 0; i < binary.length; i++) {
-              array[i] = binary.charCodeAt(i);
+      const hash = location.hash.substring(1);
+      if(hash){
+        const decode = function(input){
+          try{
+            const binary = atob(input);
+            const textDecoder = new TextDecoder('utf-8');
+            const array = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) {
+                array[i] = binary.charCodeAt(i);
+            }
+            const result = textDecoder.decode(array);
+            try{
+              new URL(result);
+              return result;
+            }catch(e){
+              return decode(result);
+            }
+          }catch(e){
+            return `https://www.google.com/search?q=${input}`;
           }
-          const result = textDecoder.decode(array);
-          new URL(result);
-          location.replace(result);
-        }catch(e){
-          location.replace(`https://www.google.com/search?q=${input}`);
         }
+
+        location.replace(decode(hash));
       }
     </script>
   </head>
